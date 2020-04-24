@@ -4,6 +4,8 @@ A Windows File-like Explorer tool to view and export the contents of files from 
 
 Van Buren was the project name Black Isle Studios assigned to their version of Fallout 3. The game was going to use an engine that Black Isle had made for Baldur's Gate 3, commonly referred to as the Jefferson Engine. In 2003, the game was canceled due to financial difficulties.
 
+![](VBtitle.png)
+
 A tech demo of Van Buren was created during the game's development. While the tech demo was not the finished game, it demonstrated the basic interface, gameplay, and interactions the final game might have had. The tech demo did however come with a set of files including textures, meshes, sounds, and text used to display in the demo.
 
 Van Buren Explore is a labour of love and was created to decrypt and view information stored in these files. 
