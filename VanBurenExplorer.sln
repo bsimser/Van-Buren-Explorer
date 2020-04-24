@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VanBurenExplorer", "VanBurenExplorer\VanBurenExplorer.csproj", "{7F8C32C9-8BC7-472F-912A-7D0488C1F78D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F8C32C9-8BC7-472F-912A-7D0488C1F78D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F8C32C9-8BC7-472F-912A-7D0488C1F78D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F8C32C9-8BC7-472F-912A-7D0488C1F78D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F8C32C9-8BC7-472F-912A-7D0488C1F78D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8731B943-A41F-4114-8602-28509382C2E0}
+	EndGlobalSection
+EndGlobal
