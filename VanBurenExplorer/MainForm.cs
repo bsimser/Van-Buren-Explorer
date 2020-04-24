@@ -51,6 +51,7 @@ namespace VanBurenExplorer
             {
                 try
                 {
+                    // TODO move string to resources
                     var aNode = new TreeNode(subDir.Name, 0, 0) { Tag = subDir, ImageKey = "folder" };
                     var subSubDirs = subDir.GetDirectories();
                     if (subSubDirs.Length != 0)
@@ -78,6 +79,7 @@ namespace VanBurenExplorer
                 foreach (var dir in nodeDirInfo.GetDirectories())
                 {
                     var item = new ListViewItem(dir.Name, 0);
+                    // TODO move strings to resources
                     subItems = new[] {
                         new ListViewItem.ListViewSubItem(item, dir.LastAccessTime.ToString("g")),
                         new ListViewItem.ListViewSubItem(item, "File folder")
@@ -89,6 +91,7 @@ namespace VanBurenExplorer
                 {
                     var item = new ListViewItem(file.Name, 1);
                     item.Tag = file;
+                    // TODO move strings to resources
                     subItems = new[] { 
                         // TODO rather than call this "File" come up with a better name based on it's type
                         new ListViewItem.ListViewSubItem(item, file.LastAccessTime.ToString("g")),
@@ -129,13 +132,14 @@ namespace VanBurenExplorer
         {
             using (new WaitCursor())
             {
-                // TODO get currently selected file
+                // get currently selected file
                 var item = listView.FocusedItem;
-                var info = (FileInfo) item?.Tag;
-                if (info == null) return;
-                // TODO process it and assign it to the plugin for viewing
-                // TODO _presenter.LoadFile();
-                toolStripStatusLabel1.Text = info.Name;
+                // check if we have the full details for the file (folders won't have this)
+                var file = (FileInfo) item?.Tag;
+                // if this a folder just return
+                if (file == null) return;
+                // process it for viewing
+                _presenter.LoadFile(file);
             }
         }
 
@@ -147,9 +151,16 @@ namespace VanBurenExplorer
             }
         }
 
+        /// <summary>
+        /// The tree view load is done here after the form is displayed so the user
+        /// is at least looking at something in case we have a big folder to process
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainForm_Shown(object sender, EventArgs e)
         {
             // let the user know we're about to do this
+            // TODO move string to resources
             toolStripStatusLabel1.Text = "Loading...";
             // give the UI a kick before we start loading folders
             Application.DoEvents();
@@ -160,7 +171,13 @@ namespace VanBurenExplorer
                 PopulateTreeView(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             }
             // once we're ready let the user know
+            // TODO move string to resources
             toolStripStatusLabel1.Text = "Ready";
+        }
+
+        public void SetStatusText(string text)
+        {
+            toolStripStatusLabel1.Text = text;
         }
     }
 }
