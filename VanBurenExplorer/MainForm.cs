@@ -1,17 +1,19 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
+using System.Security;
 using System.Windows.Forms;
+using VanBurenExplorerLib;
 
 namespace VanBurenExplorer
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IView
     {
-        private string _rootPath;
+        private readonly MainViewPresenter _presenter;
 
         public MainForm()
         {
             InitializeComponent();
+            _presenter = new MainViewPresenter(this);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -25,76 +27,137 @@ namespace VanBurenExplorer
             aboutBox.ShowDialog();
         }
 
-        private void directoryClick(object sender, EventArgs e)
+        private void DirectoryClick(object sender, EventArgs e)
         {
             var result = folderBrowserDialog1.ShowDialog();
             if (result.Equals(DialogResult.OK))
             {
-                _rootPath = folderBrowserDialog1.SelectedPath;
-                InitTreeview(_rootPath);
+                PopulateTreeView(folderBrowserDialog1.SelectedPath);
             }
         }
 
-        private void InitTreeview(string path)
+        private void PopulateTreeView(string path)
         {
-            if (!path.EndsWith(@"\")) path += @"\";
-            directoryTextBox.Text = path.ToUpper();
-            var root = new TreeNode(path) { Tag = path };
-            root.Nodes.Add(new TreeNode());
-            treeView.Nodes.Clear();
-            treeView.Nodes.Add(root);
-            root.Expand();
-            treeView.SelectedNode = root;
+            var info = new DirectoryInfo(path);
+            if (!info.Exists) return;
+            var rootNode = new TreeNode(info.Name) {Tag = info};
+            GetDirectories(info.GetDirectories(), rootNode);
+            treeView.Nodes.Add(rootNode);
+            rootNode.Expand();
         }
 
-        /// <summary>
-        /// Before expanding a folder populate the subdirectories
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void treeView_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        private void GetDirectories(DirectoryInfo[] subDirs, TreeNode nodeToAddTo)
         {
-            if (e.Node.Tag != null)
+            foreach (var subDir in subDirs)
             {
-                LoadDirectory(e.Node, _rootPath);
-            }
-        }
-
-        private void LoadDirectory(TreeNode node, string path)
-        {
-            node.Nodes.Clear();
-            var dir = new DirectoryInfo(path);
-            var folders = dir.GetDirectories();
-            foreach (var treeNode in folders.Select(subdir => new TreeNode(subdir.Name) { Tag = subdir}))
-            {
-                treeNode.Nodes.Add(new TreeNode());
-                node.Nodes.Add(treeNode);
-            }
-        }
-
-        private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            using (new WaitCursor())
-            {
-                if (e.Node.IsSelected)
+                try
                 {
-                    // TODO load file directory
+                    var aNode = new TreeNode(subDir.Name, 0, 0) { Tag = subDir, ImageKey = "folder" };
+                    var subSubDirs = subDir.GetDirectories();
+                    if (subSubDirs.Length != 0)
+                    {
+                        GetDirectories(subSubDirs, aNode);
+                    }
+                    nodeToAddTo.Nodes.Add(aNode);
+                }
+                catch (SecurityException)
+                {
+                    // ok, so we are not allowed to dig into that directory. Move on...
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    // or that one either. Move along.
                 }
             }
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                if (!e.Node.IsSelected) return;
+                var newSelected = e.Node;
+                listView.Items.Clear();
+                var nodeDirInfo = (DirectoryInfo) newSelected.Tag;
+                ListViewItem.ListViewSubItem[] subItems;
+                foreach (var dir in nodeDirInfo.GetDirectories())
+                {
+                    var item = new ListViewItem(dir.Name, 0);
+                    subItems = new[] {
+                        new ListViewItem.ListViewSubItem(item, dir.LastAccessTime.ToString("g")),
+                        new ListViewItem.ListViewSubItem(item, "File folder")
+                    };
+                    item.SubItems.AddRange(subItems);
+                    listView.Items.Add(item);
+                }
+                foreach (var file in nodeDirInfo.GetFiles())
+                {
+                    var item = new ListViewItem(file.Name, 1);
+                    item.Tag = file;
+                    subItems = new[] { 
+                        // TODO rather than call this "File" come up with a better name based on it's type
+                        new ListViewItem.ListViewSubItem(item, file.LastAccessTime.ToString("g")),
+                        new ListViewItem.ListViewSubItem(item, "File"),
+                        new ListViewItem.ListViewSubItem(item, GetFormattedSize(file.Length))
+                    };
+                    item.SubItems.AddRange(subItems);
+                    listView.Items.Add(item);
+                }
+
+                directoryTextBox.Text = nodeDirInfo.FullName;
+                listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            }
+        }
+
+        /// <summary>
+        /// Get human readable size
+        /// https://stackoverflow.com/questions/281640/how-do-i-get-a-human-readable-file-size-in-bytes-abbreviation-using-net
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        private static string GetFormattedSize(long bytes)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+            double len = bytes;
+            var order = 0;
+            while (len >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                len /= 1024;
+            }
+            // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
+            // show a single decimal place, and no space.
+            return $"{len:0} {sizes[order]}";
+        }
+
+        private void ListView_SelectedIndexChanged(object sender, EventArgs e)
         {
             using (new WaitCursor())
             {
                 // TODO get currently selected file
+                var item = listView.FocusedItem;
+                var info = (FileInfo) item?.Tag;
+                if (info == null) return;
                 // TODO process it and assign it to the plugin for viewing
+                // TODO _presenter.LoadFile();
+                toolStripStatusLabel1.Text = info.Name;
             }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            using (new WaitCursor())
+            {
+                _presenter.Init();
+            }
+        }
 
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                PopulateTreeView(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            }
         }
     }
 }

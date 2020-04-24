@@ -28,38 +28,45 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutVanBurenExplorerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.directoryTextBox = new System.Windows.Forms.ToolStripTextBox();
-            this.directoryToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.directoryButton = new System.Windows.Forms.ToolStripButton();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.treeView = new System.Windows.Forms.TreeView();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.menuStrip1.SuspendLayout();
+            this.listView = new System.Windows.Forms.ListView();
+            this.fileColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.dateColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.typeColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.sizeColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.mainMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // menuStrip1
+            // mainMenu
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(973, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.mainMenu.Location = new System.Drawing.Point(0, 0);
+            this.mainMenu.Name = "mainMenu";
+            this.mainMenu.Size = new System.Drawing.Size(973, 24);
+            this.mainMenu.TabIndex = 0;
+            this.mainMenu.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
@@ -96,55 +103,69 @@
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel1,
             this.directoryTextBox,
-            this.directoryToolStripButton});
+            this.directoryButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(973, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(55, 22);
-            this.toolStripLabel1.Text = "Directory";
-            // 
             // directoryTextBox
             // 
+            this.directoryTextBox.AutoSize = false;
             this.directoryTextBox.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.directoryTextBox.Name = "directoryTextBox";
             this.directoryTextBox.ReadOnly = true;
-            this.directoryTextBox.Size = new System.Drawing.Size(300, 25);
+            this.directoryTextBox.Size = new System.Drawing.Size(500, 25);
             // 
-            // directoryToolStripButton
+            // directoryButton
             // 
-            this.directoryToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.directoryToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("directoryToolStripButton.Image")));
-            this.directoryToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.directoryToolStripButton.Name = "directoryToolStripButton";
-            this.directoryToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.directoryToolStripButton.Text = "...";
-            this.directoryToolStripButton.Click += new System.EventHandler(this.directoryClick);
+            this.directoryButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.directoryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.directoryButton.Image = ((System.Drawing.Image)(resources.GetObject("directoryButton.Image")));
+            this.directoryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.directoryButton.Name = "directoryButton";
+            this.directoryButton.Size = new System.Drawing.Size(23, 22);
+            this.directoryButton.Text = "...";
+            this.directoryButton.Click += new System.EventHandler(this.DirectoryClick);
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 596);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(973, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(958, 17);
+            this.toolStripStatusLabel1.Spring = true;
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // treeView
             // 
             this.treeView.Dock = System.Windows.Forms.DockStyle.Left;
+            this.treeView.ImageIndex = 0;
+            this.treeView.ImageList = this.imageList1;
             this.treeView.Location = new System.Drawing.Point(0, 49);
             this.treeView.Name = "treeView";
+            this.treeView.SelectedImageIndex = 0;
             this.treeView.Size = new System.Drawing.Size(264, 547);
             this.treeView.TabIndex = 3;
-            this.treeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeExpand);
-            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
+            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView_AfterSelect);
+            // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "FolderClosed_16x.png");
+            this.imageList1.Images.SetKeyName(1, "Document_16x.png");
             // 
             // splitContainer1
             // 
@@ -155,21 +176,51 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.listView1);
+            this.splitContainer1.Panel2.Controls.Add(this.listView);
             this.splitContainer1.Size = new System.Drawing.Size(709, 547);
             this.splitContainer1.SplitterDistance = 345;
             this.splitContainer1.TabIndex = 4;
             // 
-            // listView1
+            // listView
             // 
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(0, 0);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(709, 198);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.fileColumn,
+            this.dateColumn,
+            this.typeColumn,
+            this.sizeColumn});
+            this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView.HideSelection = false;
+            this.listView.Location = new System.Drawing.Point(0, 0);
+            this.listView.Name = "listView";
+            this.listView.Size = new System.Drawing.Size(709, 198);
+            this.listView.SmallImageList = this.imageList1;
+            this.listView.TabIndex = 0;
+            this.listView.UseCompatibleStateImageBehavior = false;
+            this.listView.View = System.Windows.Forms.View.Details;
+            this.listView.SelectedIndexChanged += new System.EventHandler(this.ListView_SelectedIndexChanged);
+            // 
+            // fileColumn
+            // 
+            this.fileColumn.Text = "Name";
+            this.fileColumn.Width = 220;
+            // 
+            // dateColumn
+            // 
+            this.dateColumn.DisplayIndex = 2;
+            this.dateColumn.Text = "Date modified";
+            this.dateColumn.Width = 131;
+            // 
+            // typeColumn
+            // 
+            this.typeColumn.DisplayIndex = 1;
+            this.typeColumn.Text = "Type";
+            this.typeColumn.Width = 203;
+            // 
+            // sizeColumn
+            // 
+            this.sizeColumn.Text = "Size";
+            this.sizeColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.sizeColumn.Width = 146;
             // 
             // MainForm
             // 
@@ -180,16 +231,19 @@
             this.Controls.Add(this.treeView);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.mainMenu);
+            this.MainMenuStrip = this.mainMenu;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Van Buren Explorer";
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
+            this.mainMenu.ResumeLayout(false);
+            this.mainMenu.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
@@ -200,7 +254,7 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip mainMenu;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
@@ -210,10 +264,15 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.TreeView treeView;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ListView listView;
         private System.Windows.Forms.ToolStripTextBox directoryTextBox;
-        private System.Windows.Forms.ToolStripButton directoryToolStripButton;
+        private System.Windows.Forms.ToolStripButton directoryButton;
+        private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.ColumnHeader fileColumn;
+        private System.Windows.Forms.ColumnHeader typeColumn;
+        private System.Windows.Forms.ColumnHeader dateColumn;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ColumnHeader sizeColumn;
     }
 }
 
