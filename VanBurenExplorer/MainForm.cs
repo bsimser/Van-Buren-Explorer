@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security;
 using System.Windows.Forms;
 using VanBurenExplorerLib;
 
@@ -60,13 +59,9 @@ namespace VanBurenExplorer
                     }
                     nodeToAddTo.Nodes.Add(aNode);
                 }
-                catch (SecurityException)
-                {
-                    // ok, so we are not allowed to dig into that directory. Move on...
-                }
                 catch (UnauthorizedAccessException)
                 {
-                    // or that one either. Move along.
+                    // ok, so we are not allowed to dig into that directory. Move on...
                 }
             }
         }
@@ -154,10 +149,18 @@ namespace VanBurenExplorer
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            // let the user know we're about to do this
+            toolStripStatusLabel1.Text = "Loading...";
+            // give the UI a kick before we start loading folders
+            Application.DoEvents();
+            // now we can start our load and keep the user informed
             using (new WaitCursor())
             {
+                // might as well start here
                 PopulateTreeView(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             }
+            // once we're ready let the user know
+            toolStripStatusLabel1.Text = "Ready";
         }
     }
 }
