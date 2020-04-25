@@ -1,8 +1,15 @@
-﻿using System.Windows.Forms;
+﻿using System.IO;
+using System.Windows.Forms;
+using Be.Windows.Forms;
 using VanBurenExplorerLib.Files;
 
 namespace VanBurenExplorerLib.Viewers
 {
+    /// <summary>
+    /// Used the old(ish) hex editor control from the hex editor project
+    /// https://www.nuget.org/packages/Be.Windows.Forms.HexBox/
+    /// https://sourceforge.net/projects/hexbox/
+    /// </summary>
     public class GenericFileViewer : IFileViewer
     {
         private readonly VanBurenFile _file;
@@ -14,10 +21,16 @@ namespace VanBurenExplorerLib.Viewers
 
         public Control GetControl()
         {
-            return new Label
+            var provider = new DynamicByteProvider(File.ReadAllBytes(_file.FullPath));
+            return new HexBox
             {
-                Text = _file.FullPath, 
-                AutoSize = true
+                ColumnInfoVisible = true,
+                LineInfoVisible = true,
+                StringViewVisible = true,
+                UseFixedBytesPerLine = true,
+                VScrollBarVisible = true,
+                ByteProvider = provider,
+                Dock = DockStyle.Fill
             };
         }
     }
