@@ -50,6 +50,7 @@
     <Compile Include="Files\FileProperties.cs" />
     <Compile Include="Files\GenericFile.cs" />
     <Compile Include="Files\GrpFile.cs" />
+    <Compile Include="Files\RhtFile.cs" />
     <Compile Include="Files\TextFile.cs" />
     <Compile Include="IView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Specs\IFileSpecification.cs" />
     <Compile Include="Specs\TextFileSpecification.cs" />
     <Compile Include="Viewers\GenericFileViewer.cs" />
+    <Compile Include="Viewers\GrpFileViewer.cs" />
     <Compile Include="Viewers\IFileViewer.cs" />
     <Compile Include="Viewers\TextFileViewer.cs" />
     <Compile Include="Viewers\ViewerFactory.cs" />

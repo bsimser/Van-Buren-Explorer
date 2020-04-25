@@ -10,7 +10,7 @@ namespace VanBurenExplorerLib.Viewers
                 return new GenericFileViewer(properties.File);
 
             if(properties.File is GrpFile) 
-                return new GenericFileViewer(properties.File);
+                return new GrpFileViewer(properties.File);
 
             if(properties.File is TextFile)
                 return new TextFileViewer(properties.File);

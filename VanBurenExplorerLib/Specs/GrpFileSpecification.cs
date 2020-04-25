@@ -6,7 +6,8 @@ namespace VanBurenExplorerLib.Specs
     {
         public bool IsSatisfiedBy(FileProperties properties)
         {
-            // TODO
+            if (properties.FullPath.EndsWith(".grp"))
+                return true;
             return false;
         }
     }
