@@ -12,6 +12,9 @@ namespace VanBurenExplorerLib.Files
             if (new GrpFileSpecification().IsSatisfiedBy(properties))
                 return new GrpFile(properties.FullPath);
 
+            if(new TextFileSpecification().IsSatisfiedBy(properties))
+                return new TextFile(properties.FullPath);
+
             // fallback to a generic file
             return new GenericFile(properties.FullPath);
         }

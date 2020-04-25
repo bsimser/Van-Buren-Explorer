@@ -47,14 +47,17 @@
     <Compile Include="Files\FileProperties.cs" />
     <Compile Include="Files\GenericFile.cs" />
     <Compile Include="Files\GrpFile.cs" />
+    <Compile Include="Files\TextFile.cs" />
     <Compile Include="IView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Files\VanBurenFile.cs" />
     <Compile Include="Specs\CrtFileSpecification.cs" />
     <Compile Include="Specs\GrpFileSpecification.cs" />
     <Compile Include="Specs\IFileSpecification.cs" />
+    <Compile Include="Specs\TextFileSpecification.cs" />
     <Compile Include="Viewers\GenericFileViewer.cs" />
     <Compile Include="Viewers\IFileViewer.cs" />
+    <Compile Include="Viewers\TextFileViewer.cs" />
     <Compile Include="Viewers\ViewerFactory.cs" />
     <Compile Include="Viewers\ViewerProperties.cs" />
     <Compile Include="WaitCursor.cs" />

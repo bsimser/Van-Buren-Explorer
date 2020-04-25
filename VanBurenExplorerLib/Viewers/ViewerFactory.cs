@@ -12,6 +12,9 @@ namespace VanBurenExplorerLib.Viewers
             if(properties.File is GrpFile) 
                 return new GenericFileViewer(properties.File);
 
+            if(properties.File is TextFile)
+                return new TextFileViewer(properties.File);
+
             // fallback to a generic viewer
             return new GenericFileViewer(properties.File);
         }
