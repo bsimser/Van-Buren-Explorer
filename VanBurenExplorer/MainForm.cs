@@ -29,20 +29,23 @@ namespace VanBurenExplorer
         private void DirectoryClick(object sender, EventArgs e)
         {
             var result = folderBrowserDialog1.ShowDialog();
-            if (result.Equals(DialogResult.OK))
-            {
-                PopulateTreeView(folderBrowserDialog1.SelectedPath);
-            }
+            if (!result.Equals(DialogResult.OK)) return;
+            ClearControls();
+            PopulateTreeView(folderBrowserDialog1.SelectedPath);
         }
 
         private void PopulateTreeView(string path)
         {
-            var info = new DirectoryInfo(path);
-            if (!info.Exists) return;
-            var rootNode = new TreeNode(info.Name) {Tag = info};
-            GetDirectories(info.GetDirectories(), rootNode);
-            treeView.Nodes.Add(rootNode);
-            rootNode.Expand();
+            using (new WaitCursor())
+            {
+                var info = new DirectoryInfo(path);
+                if (!info.Exists) return;
+                var rootNode = new TreeNode(info.Name) { Tag = info };
+                GetDirectories(info.GetDirectories(), rootNode);
+                treeView.Nodes.Add(rootNode);
+                rootNode.Expand();
+                treeView.SelectedNode = rootNode;
+            }
         }
 
         private void GetDirectories(DirectoryInfo[] subDirs, TreeNode nodeToAddTo)
@@ -164,12 +167,8 @@ namespace VanBurenExplorer
             toolStripStatusLabel1.Text = "Loading...";
             // give the UI a kick before we start loading folders
             Application.DoEvents();
-            // now we can start our load and keep the user informed
-            using (new WaitCursor())
-            {
-                // might as well start here
-                PopulateTreeView(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
-            }
+            // might as well start here for lack of a better place
+            PopulateTreeView(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             // once we're ready let the user know
             // TODO move string to resources
             toolStripStatusLabel1.Text = "Ready";
@@ -184,6 +183,13 @@ namespace VanBurenExplorer
         public void SetStatusText(string text)
         {
             toolStripStatusLabel1.Text = text;
+        }
+
+        private void ClearControls()
+        {
+            treeView.Nodes.Clear();
+            listView.Items.Clear();
+            splitContainer1.Panel1.Controls.Clear();
         }
     }
 }
