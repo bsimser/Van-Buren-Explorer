@@ -12,6 +12,7 @@ namespace VanBurenExplorerLib.Viewers
         public UserControl1()
         {
             InitializeComponent();
+            _player = new WaveOut();
         }
 
         public void LoadAudio(byte[] bytes)
@@ -19,7 +20,6 @@ namespace VanBurenExplorerLib.Viewers
             if (_player != null)
             {
                 _player.Stop();
-                _player = null;
             }
             _stream = new RawSourceWaveStream(bytes, 0, bytes.Length, new WaveFormat());
             waveViewer1.WaveStream = _stream;
@@ -39,7 +39,6 @@ namespace VanBurenExplorerLib.Viewers
                 }
             }
 
-            _player = new WaveOut();
             _player.Init(_stream);
             _player.Play();
         }
@@ -58,6 +57,29 @@ namespace VanBurenExplorerLib.Viewers
         private void button3_Click(object sender, EventArgs e)
         {
             _player?.Stop();
+            _stream.Position = 0;
+        }
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            if (disposing && _player != null)
+            {
+                _player.Stop();
+                _player.Dispose();
+            }
+            if (disposing && _stream != null)
+            {
+                _stream.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
