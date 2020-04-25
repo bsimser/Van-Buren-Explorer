@@ -175,6 +175,12 @@ namespace VanBurenExplorer
             toolStripStatusLabel1.Text = "Ready";
         }
 
+        public void SetControl(Control control)
+        {
+            splitContainer1.Panel1.Controls.Clear();
+            splitContainer1.Panel1.Controls.Add(control);
+        }
+
         public void SetStatusText(string text)
         {
             toolStripStatusLabel1.Text = text;
