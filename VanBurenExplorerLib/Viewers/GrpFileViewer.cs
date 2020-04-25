@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Be.Windows.Forms;
 using VanBurenExplorerLib.Files;
 
 namespace VanBurenExplorerLib.Viewers
@@ -34,26 +35,28 @@ namespace VanBurenExplorerLib.Viewers
             };
             listBox.SelectedIndexChanged += delegate(object sender, EventArgs args)
             {
-                splitter.Panel2.Controls.Clear();
                 var lb = sender as ListBox;
                 var entry = lb.Items[lb.SelectedIndex] as GrpEntry;
-                if (entry.Type == GrpEntry.GrpType.BMP)
+
+                // clear any previous control in our preview panel
+                splitter.Panel2.Controls.Clear();
+
+                switch (entry.Type)
                 {
-                    var pictureBox = new PictureBox
-                    {
-                        Dock = DockStyle.Fill, 
-                        SizeMode = PictureBoxSizeMode.CenterImage
-                    };
-                    using (var reader = new BinaryReader(File.OpenRead(entry.FileName)))
-                    {
-                        reader.BaseStream.Position = entry.Position;
-                        var bytes = reader.ReadBytes(entry.Length);
-                        using (var stream = new MemoryStream(bytes))
-                        {
-                            pictureBox.Image = Image.FromStream(stream);
-                        }
-                    }
-                    splitter.Panel2.Controls.Add(pictureBox);
+                    case GrpEntry.GrpType.Unknown:
+                        splitter.Panel2.Controls.Add(LoadHexControl(entry));
+                        break;
+                    case GrpEntry.GrpType.BMP:
+                        splitter.Panel2.Controls.Add(LoadBitmap(entry));
+                        break;
+                    case GrpEntry.GrpType.TGA:
+                        splitter.Panel2.Controls.Add(LoadHexControl(entry));
+                        break;
+                    case GrpEntry.GrpType.TGA2:
+                        splitter.Panel2.Controls.Add(LoadHexControl(entry));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             };
             foreach (var entry in _entries)
@@ -63,6 +66,45 @@ namespace VanBurenExplorerLib.Viewers
             splitter.Panel1.Controls.Add(listBox);
             
             return splitter;
+        }
+
+        private Control LoadHexControl(GrpEntry entry)
+        {
+            using (var reader = new BinaryReader(File.OpenRead(entry.FileName)))
+            {
+                reader.BaseStream.Position = entry.Position;
+                var bytes = reader.ReadBytes(entry.Length);
+                var provider = new DynamicByteProvider(bytes);
+                return new HexBox
+                {
+                    ColumnInfoVisible = true,
+                    LineInfoVisible = true,
+                    StringViewVisible = true,
+                    UseFixedBytesPerLine = true,
+                    VScrollBarVisible = true,
+                    ByteProvider = provider,
+                    Dock = DockStyle.Fill
+                };
+            }
+        }
+
+        private Control LoadBitmap(GrpEntry entry)
+        {
+            var pictureBox = new PictureBox
+            {
+                Dock = DockStyle.Fill,
+                SizeMode = PictureBoxSizeMode.CenterImage
+            };
+            using (var reader = new BinaryReader(File.OpenRead(entry.FileName)))
+            {
+                reader.BaseStream.Position = entry.Position;
+                var bytes = reader.ReadBytes(entry.Length);
+                using (var stream = new MemoryStream(bytes))
+                {
+                    pictureBox.Image = Image.FromStream(stream);
+                }
+            }
+            return pictureBox;
         }
 
         private void LoadFile()
