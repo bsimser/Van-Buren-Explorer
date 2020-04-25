@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Be.Windows.Forms;
+using NAudio.Wave;
 using VanBurenExplorerLib.Files;
 
 namespace VanBurenExplorerLib.Viewers
@@ -55,6 +56,9 @@ namespace VanBurenExplorerLib.Viewers
                     case GrpEntry.GrpType.TGA2:
                         splitter.Panel2.Controls.Add(LoadHexControl(entry));
                         break;
+                    case GrpEntry.GrpType.WAV:
+                        splitter.Panel2.Controls.Add(LoadAudioControl(entry));
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -66,6 +70,17 @@ namespace VanBurenExplorerLib.Viewers
             splitter.Panel1.Controls.Add(listBox);
             
             return splitter;
+        }
+
+        private Control LoadAudioControl(GrpEntry entry)
+        {
+            var control = new UserControl1();
+            using (var reader = new BinaryReader(File.OpenRead(entry.FileName)))
+            {
+                reader.BaseStream.Position = entry.Position;
+                control.LoadAudio(reader.ReadBytes(entry.Length));
+            }
+            return control;
         }
 
         private Control LoadHexControl(GrpEntry entry)
@@ -152,6 +167,14 @@ namespace VanBurenExplorerLib.Viewers
                 {
                     entry.Type = entry.Header[16] == 24 ? GrpEntry.GrpType.TGA : GrpEntry.GrpType.TGA2;
                 }
+
+                if (entry.Header[0] == 82 &&
+                    entry.Header[1] == 73 &&
+                    entry.Header[2] == 70 &&
+                    entry.Header[3] == 70)
+                {
+                    entry.Type = GrpEntry.GrpType.WAV;
+                }
             }
         }
 
@@ -173,6 +196,7 @@ namespace VanBurenExplorerLib.Viewers
                 BMP,
                 TGA,
                 TGA2,
+                WAV
             }
 
             /// <summary>
