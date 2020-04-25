@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using VanBurenExplorer.Properties;
 using VanBurenExplorerLib;
 
 namespace VanBurenExplorer
@@ -54,8 +55,7 @@ namespace VanBurenExplorer
             {
                 try
                 {
-                    // TODO move string to resources
-                    var aNode = new TreeNode(subDir.Name, 0, 0) { Tag = subDir, ImageKey = "folder" };
+                    var aNode = new TreeNode(subDir.Name, 0, 0) { Tag = subDir, ImageKey = Resources.TreeNodeImageKey };
                     var subSubDirs = subDir.GetDirectories();
                     if (subSubDirs.Length != 0)
                     {
@@ -82,10 +82,9 @@ namespace VanBurenExplorer
                 foreach (var dir in nodeDirInfo.GetDirectories())
                 {
                     var item = new ListViewItem(dir.Name, 0);
-                    // TODO move strings to resources
                     subItems = new[] {
                         new ListViewItem.ListViewSubItem(item, dir.LastAccessTime.ToString("g")),
-                        new ListViewItem.ListViewSubItem(item, "File folder")
+                        new ListViewItem.ListViewSubItem(item, Resources.DirectoryListViewType)
                     };
                     item.SubItems.AddRange(subItems);
                     listView.Items.Add(item);
@@ -94,11 +93,10 @@ namespace VanBurenExplorer
                 {
                     var item = new ListViewItem(file.Name, 1);
                     item.Tag = file;
-                    // TODO move strings to resources
                     subItems = new[] { 
                         // TODO rather than call this "File" come up with a better name based on it's type
                         new ListViewItem.ListViewSubItem(item, file.LastAccessTime.ToString("g")),
-                        new ListViewItem.ListViewSubItem(item, "File"),
+                        new ListViewItem.ListViewSubItem(item, Resources.FileListViewType),
                         new ListViewItem.ListViewSubItem(item, GetFormattedSize(file.Length))
                     };
                     item.SubItems.AddRange(subItems);
@@ -113,6 +111,7 @@ namespace VanBurenExplorer
         /// <summary>
         /// Get human readable size
         /// https://stackoverflow.com/questions/281640/how-do-i-get-a-human-readable-file-size-in-bytes-abbreviation-using-net
+        /// TODO maybe use humanizr or something similar instead of writing code for this?
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
@@ -163,15 +162,13 @@ namespace VanBurenExplorer
         private void MainForm_Shown(object sender, EventArgs e)
         {
             // let the user know we're about to do this
-            // TODO move string to resources
-            toolStripStatusLabel1.Text = "Loading...";
+            toolStripStatusLabel1.Text = Resources.StatusLoadingText;
             // give the UI a kick before we start loading folders
             Application.DoEvents();
             // might as well start here for lack of a better place
             PopulateTreeView(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             // once we're ready let the user know
-            // TODO move string to resources
-            toolStripStatusLabel1.Text = "Ready";
+            toolStripStatusLabel1.Text = Resources.StatusReadyText;
         }
 
         public void SetControl(Control control)
