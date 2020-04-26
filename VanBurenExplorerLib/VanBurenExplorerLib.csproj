@@ -49,14 +49,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileHelper.cs" />
     <Compile Include="Files\CrtFile.cs" />
     <Compile Include="Files\FileFactory.cs" />
     <Compile Include="Files\FileProperties.cs" />
     <Compile Include="Files\GenericFile.cs" />
     <Compile Include="Files\GrpFile.cs" />
-    <Compile Include="Files\RhtFile.cs" />
     <Compile Include="Files\TextFile.cs" />
-    <Compile Include="IView.cs" />
+    <Compile Include="Models\Entry.cs" />
+    <Compile Include="Models\RHTFile.cs" />
+    <Compile Include="Models\F3RHTHeader.cs" />
+    <Compile Include="Models\LumpType.cs" />
+    <Compile Include="Models\StringWithOffset.cs" />
+    <Compile Include="Models\MainViewModel.cs" />
+    <Compile Include="Viewers\F3GRPHeader.cs" />
+    <Compile Include="Viewers\Lump.cs" />
+    <Compile Include="Views\IMainView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Files\VanBurenFile.cs" />
     <Compile Include="Specs\CrtFileSpecification.cs" />
@@ -85,5 +93,6 @@
       <DependentUpon>UserControl1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

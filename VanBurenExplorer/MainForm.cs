@@ -3,10 +3,11 @@ using System.IO;
 using System.Windows.Forms;
 using VanBurenExplorer.Properties;
 using VanBurenExplorerLib;
+using VanBurenExplorerLib.Views;
 
 namespace VanBurenExplorer
 {
-    public partial class MainForm : Form, IView
+    public partial class MainForm : Form, IMainView
     {
         private readonly MainViewPresenter _presenter;
 
@@ -16,37 +17,23 @@ namespace VanBurenExplorer
             _presenter = new MainViewPresenter(this);
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Exit_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void aboutVanBurenExplorerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void About_Click(object sender, EventArgs e)
         {
             var aboutBox = new AboutBox();
             aboutBox.ShowDialog();
         }
 
-        private void DirectoryClick(object sender, EventArgs e)
+        private void Directory_Click(object sender, EventArgs e)
         {
             var result = folderBrowserDialog1.ShowDialog();
             if (!result.Equals(DialogResult.OK)) return;
             ClearControls();
-            PopulateTreeView(folderBrowserDialog1.SelectedPath);
-        }
-
-        private void PopulateTreeView(string path)
-        {
-            using (new WaitCursor())
-            {
-                var info = new DirectoryInfo(path);
-                if (!info.Exists) return;
-                var rootNode = new TreeNode(info.Name) { Tag = info };
-                GetDirectories(info.GetDirectories(), rootNode);
-                treeView.Nodes.Add(rootNode);
-                rootNode.Expand();
-                treeView.SelectedNode = rootNode;
-            }
+            ChangeDirectory(folderBrowserDialog1.SelectedPath);
         }
 
         private void GetDirectories(DirectoryInfo[] subDirs, TreeNode nodeToAddTo)
@@ -94,10 +81,10 @@ namespace VanBurenExplorer
                     var item = new ListViewItem(file.Name, 1);
                     item.Tag = file;
                     subItems = new[] { 
-                        // TODO rather than call this "File" come up with a better name based on it's type
                         new ListViewItem.ListViewSubItem(item, file.LastAccessTime.ToString("g")),
                         new ListViewItem.ListViewSubItem(item, Resources.FileListViewType),
-                        new ListViewItem.ListViewSubItem(item, GetFormattedSize(file.Length))
+                        // TODO rather than call this "File" come up with a better name based on it's type
+                        new ListViewItem.ListViewSubItem(item, FileHelper.GetFormattedSize(file.Length))
                     };
                     item.SubItems.AddRange(subItems);
                     listView.Items.Add(item);
@@ -106,28 +93,6 @@ namespace VanBurenExplorer
                 directoryTextBox.Text = nodeDirInfo.FullName;
                 listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             }
-        }
-
-        /// <summary>
-        /// Get human readable size
-        /// https://stackoverflow.com/questions/281640/how-do-i-get-a-human-readable-file-size-in-bytes-abbreviation-using-net
-        /// TODO maybe use humanizr or something similar instead of writing code for this?
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
-        private static string GetFormattedSize(long bytes)
-        {
-            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
-            double len = bytes;
-            var order = 0;
-            while (len >= 1024 && order < sizes.Length - 1)
-            {
-                order++;
-                len /= 1024;
-            }
-            // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
-            // show a single decimal place, and no space.
-            return $"{len:0} {sizes[order]}";
         }
 
         private void ListView_SelectedIndexChanged(object sender, EventArgs e)
@@ -163,10 +128,8 @@ namespace VanBurenExplorer
         {
             // let the user know we're about to do this
             toolStripStatusLabel1.Text = Resources.StatusLoadingText;
-            // give the UI a kick before we start loading folders
-            Application.DoEvents();
-            // might as well start here for lack of a better place
-            PopulateTreeView(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+            // start the program off by asking where to start looking for files
+            Directory_Click(this, e);
             // once we're ready let the user know
             toolStripStatusLabel1.Text = Resources.StatusReadyText;
         }
@@ -180,6 +143,21 @@ namespace VanBurenExplorer
         public void SetStatusText(string text)
         {
             toolStripStatusLabel1.Text = text;
+        }
+
+        public void ChangeDirectory(string path)
+        {
+            using (new WaitCursor())
+            {
+                var info = new DirectoryInfo(path);
+                if (!info.Exists) return;
+                var rootNode = new TreeNode(info.Name) { Tag = info };
+                GetDirectories(info.GetDirectories(), rootNode);
+                treeView.Nodes.Add(rootNode);
+                rootNode.Expand();
+                treeView.SelectedNode = rootNode;
+                _presenter.LoadCatalog(path);
+            }
         }
 
         private void ClearControls()

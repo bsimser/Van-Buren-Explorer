@@ -82,7 +82,7 @@
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.Exit_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -98,7 +98,7 @@
             this.aboutVanBurenExplorerToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
             this.aboutVanBurenExplorerToolStripMenuItem.Size = new System.Drawing.Size(228, 22);
             this.aboutVanBurenExplorerToolStripMenuItem.Text = "About Van Buren Explorer";
-            this.aboutVanBurenExplorerToolStripMenuItem.Click += new System.EventHandler(this.aboutVanBurenExplorerToolStripMenuItem_Click);
+            this.aboutVanBurenExplorerToolStripMenuItem.Click += new System.EventHandler(this.About_Click);
             // 
             // toolStrip1
             // 
@@ -128,7 +128,12 @@
             this.directoryButton.Name = "directoryButton";
             this.directoryButton.Size = new System.Drawing.Size(23, 22);
             this.directoryButton.Text = "...";
-            this.directoryButton.Click += new System.EventHandler(this.DirectoryClick);
+            this.directoryButton.Click += new System.EventHandler(this.Directory_Click);
+            // 
+            // folderBrowserDialog1
+            // 
+            this.folderBrowserDialog1.Description = "Locate the folder where your copy of \"Van Buren\" is installed to";
+            this.folderBrowserDialog1.ShowNewFolderButton = false;
             // 
             // statusStrip1
             // 
@@ -143,7 +148,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(927, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(958, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -188,6 +193,7 @@
             this.typeColumn,
             this.sizeColumn});
             this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView.FullRowSelect = true;
             this.listView.HideSelection = false;
             this.listView.Location = new System.Drawing.Point(0, 0);
             this.listView.Name = "listView";
