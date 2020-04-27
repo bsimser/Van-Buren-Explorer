@@ -1,4 +1,6 @@
-﻿namespace VanBurenExplorerLib
+﻿using System.IO;
+
+namespace VanBurenExplorerLib.Helpers
 {
     public static class FileHelper
     {
@@ -22,6 +24,22 @@
             // Adjust the format string to your preferences. For example "{0:0.#}{1}" would
             // show a single decimal place, and no space.
             return $"{len:0} {sizes[order]}";
+        }
+
+        public static string GetFileTypeDescription(string filename)
+        {
+            var ext = Path.GetExtension(filename).TrimStart('.').ToUpper();
+            switch (ext)
+            {
+                case "TTF":
+                    return "TrueType font file";
+                case "DLL":
+                    return "Application extension";
+                case "EXE":
+                    return "Application";
+                default:
+                    return ext + " File";
+            }
         }
     }
 }

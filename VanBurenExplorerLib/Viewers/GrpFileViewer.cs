@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using Be.Windows.Forms;
 using VanBurenExplorerLib.Files;
+using VanBurenExplorerLib.Helpers;
 using VanBurenExplorerLib.Models;
 
 namespace VanBurenExplorerLib.Viewers

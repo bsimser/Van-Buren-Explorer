@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using VanBurenExplorer.Properties;
 using VanBurenExplorerLib;
+using VanBurenExplorerLib.Helpers;
 using VanBurenExplorerLib.Views;
 
 namespace VanBurenExplorer
@@ -78,12 +79,10 @@ namespace VanBurenExplorer
                 }
                 foreach (var file in nodeDirInfo.GetFiles())
                 {
-                    var item = new ListViewItem(file.Name, 1);
-                    item.Tag = file;
+                    var item = new ListViewItem(file.Name, 1) {Tag = file};
                     subItems = new[] { 
                         new ListViewItem.ListViewSubItem(item, file.LastAccessTime.ToString("g")),
-                        new ListViewItem.ListViewSubItem(item, Resources.FileListViewType),
-                        // TODO rather than call this "File" come up with a better name based on it's type
+                        new ListViewItem.ListViewSubItem(item, FileHelper.GetFileTypeDescription(file.Name)),
                         new ListViewItem.ListViewSubItem(item, FileHelper.GetFormattedSize(file.Length))
                     };
                     item.SubItems.AddRange(subItems);
