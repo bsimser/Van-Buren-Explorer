@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace VanBurenExplorerLib
+namespace VanBurenExplorerLib.Helpers
 {
     /// <summary>
     /// Simple class to wrap in a using statement for long operations

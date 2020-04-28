@@ -53,46 +53,46 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\FileHelper.cs" />
-    <Compile Include="Files\CrtFile.cs" />
-    <Compile Include="Files\FileFactory.cs" />
-    <Compile Include="Files\FileProperties.cs" />
-    <Compile Include="Files\GenericFile.cs" />
-    <Compile Include="Files\GrpFile.cs" />
-    <Compile Include="Files\TextFile.cs" />
+    <Compile Include="Models\CrtFile.cs" />
+    <Compile Include="Models\FileFactory.cs" />
+    <Compile Include="Models\FileProperties.cs" />
+    <Compile Include="Models\GenericFile.cs" />
+    <Compile Include="Models\GrpFile.cs" />
+    <Compile Include="Models\TextFile.cs" />
     <Compile Include="Models\Entry.cs" />
     <Compile Include="Models\RHTFile.cs" />
     <Compile Include="Models\F3RHTHeader.cs" />
     <Compile Include="Models\LumpType.cs" />
     <Compile Include="Models\StringWithOffset.cs" />
     <Compile Include="Models\MainViewModel.cs" />
-    <Compile Include="Viewers\F3GRPHeader.cs" />
-    <Compile Include="Viewers\Lump.cs" />
+    <Compile Include="Views\F3GRPHeader.cs" />
+    <Compile Include="Views\Lump.cs" />
     <Compile Include="Views\IMainView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Files\VanBurenFile.cs" />
+    <Compile Include="Models\VanBurenFile.cs" />
     <Compile Include="Specs\CrtFileSpecification.cs" />
     <Compile Include="Specs\GrpFileSpecification.cs" />
     <Compile Include="Specs\IFileSpecification.cs" />
     <Compile Include="Specs\TextFileSpecification.cs" />
-    <Compile Include="Viewers\GenericFileViewer.cs" />
-    <Compile Include="Viewers\GrpFileViewer.cs" />
-    <Compile Include="Viewers\IFileViewer.cs" />
-    <Compile Include="Viewers\TextFileViewer.cs" />
-    <Compile Include="Viewers\UserControl1.cs">
+    <Compile Include="Views\GenericFileViewer.cs" />
+    <Compile Include="Views\GrpFileViewer.cs" />
+    <Compile Include="Views\IFileViewer.cs" />
+    <Compile Include="Views\TextFileViewer.cs" />
+    <Compile Include="Views\UserControl1.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Viewers\UserControl1.Designer.cs">
+    <Compile Include="Views\UserControl1.Designer.cs">
       <DependentUpon>UserControl1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Viewers\ViewerFactory.cs" />
-    <Compile Include="Viewers\ViewerProperties.cs" />
-    <Compile Include="WaitCursor.cs" />
+    <Compile Include="Views\ViewerFactory.cs" />
+    <Compile Include="Views\ViewerProperties.cs" />
+    <Compile Include="Helpers\WaitCursor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Viewers\UserControl1.resx">
+    <EmbeddedResource Include="Views\UserControl1.resx">
       <DependentUpon>UserControl1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

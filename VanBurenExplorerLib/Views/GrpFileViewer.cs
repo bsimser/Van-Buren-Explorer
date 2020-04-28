@@ -8,12 +8,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Be.Windows.Forms;
-using VanBurenExplorerLib.Files;
 using VanBurenExplorerLib.Helpers;
 using VanBurenExplorerLib.Models;
 using ImageFormat = Pfim.ImageFormat;
 
-namespace VanBurenExplorerLib.Viewers
+namespace VanBurenExplorerLib.Views
 {
     public class GrpFileViewer : IFileViewer
     {

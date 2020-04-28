@@ -1,6 +1,6 @@
-﻿using VanBurenExplorerLib.Files;
+﻿using VanBurenExplorerLib.Models;
 
-namespace VanBurenExplorerLib.Viewers
+namespace VanBurenExplorerLib.Views
 {
     public static class ViewerFactory
     {

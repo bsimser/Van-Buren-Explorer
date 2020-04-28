@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace VanBurenExplorerLib.Viewers
+namespace VanBurenExplorerLib.Views
 {
     public interface IFileViewer
     {

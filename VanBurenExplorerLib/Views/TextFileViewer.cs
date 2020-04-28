@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Windows.Forms;
-using VanBurenExplorerLib.Files;
+using VanBurenExplorerLib.Models;
 
-namespace VanBurenExplorerLib.Viewers
+namespace VanBurenExplorerLib.Views
 {
     public class TextFileViewer : IFileViewer
     {

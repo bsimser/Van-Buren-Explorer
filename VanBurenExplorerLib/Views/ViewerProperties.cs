@@ -1,7 +1,6 @@
-﻿using VanBurenExplorerLib.Files;
-using VanBurenExplorerLib.Models;
+﻿using VanBurenExplorerLib.Models;
 
-namespace VanBurenExplorerLib.Viewers
+namespace VanBurenExplorerLib.Views
 {
     public class ViewerProperties
     {

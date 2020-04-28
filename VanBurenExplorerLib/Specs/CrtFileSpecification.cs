@@ -1,4 +1,4 @@
-﻿using VanBurenExplorerLib.Files;
+﻿using VanBurenExplorerLib.Models;
 
 namespace VanBurenExplorerLib.Specs
 {

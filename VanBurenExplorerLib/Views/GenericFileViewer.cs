@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Windows.Forms;
 using Be.Windows.Forms;
-using VanBurenExplorerLib.Files;
+using VanBurenExplorerLib.Models;
 
-namespace VanBurenExplorerLib.Viewers
+namespace VanBurenExplorerLib.Views
 {
     /// <summary>
     /// Used the old(ish) hex editor control from the hex editor project

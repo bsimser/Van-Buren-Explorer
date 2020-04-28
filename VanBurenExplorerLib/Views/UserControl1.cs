@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using NAudio.Wave;
 
-namespace VanBurenExplorerLib.Viewers
+namespace VanBurenExplorerLib.Views
 {
     public partial class UserControl1 : UserControl
     {

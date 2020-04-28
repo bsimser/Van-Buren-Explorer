@@ -1,6 +1,6 @@
 ﻿using VanBurenExplorerLib.Specs;
 
-namespace VanBurenExplorerLib.Files
+namespace VanBurenExplorerLib.Models
 {
     public static class FileFactory
     {

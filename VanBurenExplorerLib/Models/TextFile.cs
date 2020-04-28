@@ -1,4 +1,4 @@
-﻿namespace VanBurenExplorerLib.Files
+﻿namespace VanBurenExplorerLib.Models
 {
     public class TextFile : VanBurenFile
     {

@@ -1,4 +1,4 @@
-﻿namespace VanBurenExplorerLib.Viewers
+﻿namespace VanBurenExplorerLib.Views
 {
     partial class UserControl1
     {

@@ -1,4 +1,4 @@
-﻿namespace VanBurenExplorerLib.Files
+﻿namespace VanBurenExplorerLib.Models
 {
     public abstract class VanBurenFile
     {

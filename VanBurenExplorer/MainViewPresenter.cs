@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using VanBurenExplorerLib.Files;
 using VanBurenExplorerLib.Models;
-using VanBurenExplorerLib.Viewers;
 using VanBurenExplorerLib.Views;
 
 namespace VanBurenExplorer

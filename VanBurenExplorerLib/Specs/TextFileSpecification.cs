@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using VanBurenExplorerLib.Files;
+using VanBurenExplorerLib.Models;
 
 namespace VanBurenExplorerLib.Specs
 {
