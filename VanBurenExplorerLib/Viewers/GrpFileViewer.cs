@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Be.Windows.Forms;
 using VanBurenExplorerLib.Files;
 using VanBurenExplorerLib.Helpers;
 using VanBurenExplorerLib.Models;
+using ImageFormat = Pfim.ImageFormat;
 
 namespace VanBurenExplorerLib.Viewers
 {
@@ -122,7 +126,7 @@ namespace VanBurenExplorerLib.Viewers
                     _splitter.Panel2.Controls.Add(LoadHexControl(entry));
                     break;
                 case LumpType.TGA:
-                    _splitter.Panel2.Controls.Add(LoadHexControl(entry));
+                    _splitter.Panel2.Controls.Add(LoadImageControl(entry));
                     break;
                 case LumpType.WAV:
                     _splitter.Panel2.Controls.Add(LoadAudioControl(entry));
@@ -157,6 +161,75 @@ namespace VanBurenExplorerLib.Viewers
                 reader.BaseStream.Position = lump.offset;
                 control.LoadAudio(reader.ReadBytes(lump.length));
             }
+            return control;
+        }
+
+        private Control LoadImageControl(Entry entry)
+        {
+            var control = new PictureBox
+            {
+                Dock = DockStyle.Fill,
+                SizeMode = PictureBoxSizeMode.CenterImage
+            };
+            using (var reader = new BinaryReader(File.OpenRead(_file.FullPath)))
+            {
+                var lump = _lumps[entry.Index];
+                reader.BaseStream.Position = lump.offset;
+                var data = reader.ReadBytes(lump.length);
+
+                if (data[0] == 'B' && data[1] == 'M')
+                {
+                    // BMP images can just be read directly
+                    using (var stream = new MemoryStream(data))
+                    {
+                        control.Image = Image.FromStream(stream);
+                    }
+                }
+                else
+                {
+                    // TGA files need to go through Pfim
+                    using (var stream = new MemoryStream(data))
+                    {
+                        var image = Pfim.Pfim.FromStream(stream);
+                        PixelFormat format;
+                        switch (image.Format)
+                        {
+                            case ImageFormat.Rgb8:
+                                format = PixelFormat.Format8bppIndexed;
+                                break;
+                            case ImageFormat.R5g5b5:
+                                format = PixelFormat.Format16bppRgb555;
+                                break;
+                            case ImageFormat.R5g6b5:
+                                format = PixelFormat.Format16bppRgb565;
+                                break;
+                            case ImageFormat.R5g5b5a1:
+                                format = PixelFormat.Format16bppArgb1555;
+                                break;
+                            case ImageFormat.Rgba16:
+                                // TODO this is probably wrong
+                                format = PixelFormat.Format16bppGrayScale;
+                                break;
+                            case ImageFormat.Rgb24:
+                                format = PixelFormat.Format24bppRgb;
+                                break;
+                            case ImageFormat.Rgba32:
+                                format = PixelFormat.Format32bppArgb;
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                        // pin image data as the picture box can outlive the pfim image object
+                        // which, unless pinned, will garbage collect the data array causing image corruption
+                        var handle = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
+                        var ptr = Marshal.UnsafeAddrOfPinnedArrayElement(image.Data, 0);
+                        var bitmap = new Bitmap(image.Width, image.Height, image.Stride, format, ptr);
+                        // TODO might need to do something with the bitmap palette here
+                        control.Image = bitmap;
+                    }
+                }
+            }
+
             return control;
         }
 
@@ -198,27 +271,6 @@ namespace VanBurenExplorerLib.Viewers
                 };
             }
             return control;
-        }
-
-        private Control LoadBitmap(Lump entry)
-        {
-            var pictureBox = new PictureBox
-            {
-                Dock = DockStyle.Fill,
-                SizeMode = PictureBoxSizeMode.CenterImage
-            };
-            /* TODO this only works for BMP images but the type in the catalog marks them as TGA
-            using (var reader = new BinaryReader(File.OpenRead(entry.FileName)))
-            {
-                reader.BaseStream.Position = entry.offset;
-                var bytes = reader.ReadBytes(entry.length);
-                using (var stream = new MemoryStream(bytes))
-                {
-                    pictureBox.Image = Image.FromStream(stream);
-                }
-            }
-            */
-            return pictureBox;
         }
 
         /// <summary>
