@@ -65,6 +65,7 @@
     <Compile Include="Models\LumpType.cs" />
     <Compile Include="Models\StringWithOffset.cs" />
     <Compile Include="Models\MainViewModel.cs" />
+    <Compile Include="Specs\TgaFileSpecification.cs" />
     <Compile Include="Views\F3GRPHeader.cs" />
     <Compile Include="Views\Lump.cs" />
     <Compile Include="Views\IMainView.cs" />
