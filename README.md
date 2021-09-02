@@ -64,6 +64,10 @@ The following formats are unknown and/or currently unsupported (but can still be
 
 * Visual Studio 2019
 
+## Current Version
+
+The current version is 1.0 and was released 9/2/2021
+
 ## Installation
 
 * TODO
