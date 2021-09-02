@@ -15,6 +15,9 @@ namespace VanBurenExplorerLib.Models
             if(new TextFileSpecification().IsSatisfiedBy(properties))
                 return new TextFile(properties.FullPath);
 
+            if (new TgaFileSpecification().IsSatisfiedBy(properties))
+                return new TgaFile(properties.FullPath);
+
             // fallback to a generic file
             return new GenericFile(properties.FullPath);
         }

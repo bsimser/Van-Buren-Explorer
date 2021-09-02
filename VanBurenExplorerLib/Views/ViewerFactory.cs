@@ -15,6 +15,9 @@ namespace VanBurenExplorerLib.Views
             if(properties.File is TextFile)
                 return new TextFileViewer(properties.File);
 
+            if (properties.File is TgaFile)
+                return new TgaFileViewer(properties.File);
+            
             // fallback to a generic viewer
             return new GenericFileViewer(properties.File);
         }

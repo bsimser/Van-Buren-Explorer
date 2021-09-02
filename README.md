@@ -72,6 +72,24 @@ The current version is 1.0 and was released 9/2/2021
 
 * TODO
 
+## Adding new File types
+
+To add a new file type to the system you'll need to know how to specify the file type and how to view it:
+
+1. Create a new class derived from VanBurenFile in the the Models folder (e.g. MyFile.cs)
+2. Create a new class implementing IFileSpecification in the Specs folder (e.g. MyFileSpecification)
+3. Create a new class implementing IFileViewer in the Views folder (e.g. MyFileViewer.cs)
+4. Add the following lines to the CreateUsing method in FileFactory.cs in the Models folder:
+   1. if(new MyFileSpecification().IsSatisifiedBy(properties))
+   2. return new MyFile(properties.FullPath);
+5. Add the following lines to the CreateUsing method in ViewerFactors.cs in the Views folder:
+   1. if(properties.File is MyFile)
+   2. return new MyFileViewer(properties.File);
+6. Write the implementation of the methods you added (detecting the file type using whatever means and returning the Windows form controls for viewing your file)
+7. Compile and run to test your new file type.
+
+That's it!
+
 ## Usage
 
 1. Launch the applicaton from wherever you have downloaded or built it
