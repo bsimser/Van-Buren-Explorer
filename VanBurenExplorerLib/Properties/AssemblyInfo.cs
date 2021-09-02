@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Van Buren Explorer")]
-[assembly: AssemblyDescription("A Windows File-like Explorer tool to view and export the contents of files from the lost Fallout 3 game, code named Van Buren, created by Black Isle Studios.")]
+[assembly: AssemblyTitle("VanBurenExplorerLib")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Bil Simser")]
-[assembly: AssemblyProduct("Van Buren Explorer")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("VanBurenExplorerLib")]
+[assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7f8c32c9-8bc7-472f-912a-7d0488c1f78d")]
+[assembly: Guid("c199ab6f-d931-456b-8d8a-aa0697dac91d")]
 
 // Version information for an assembly consists of the following four values:
 //

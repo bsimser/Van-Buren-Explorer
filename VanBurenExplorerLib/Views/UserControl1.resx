@@ -117,19 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DirectoryListViewType" xml:space="preserve">
-    <value>File folder</value>
-  </data>
-  <data name="FileListViewType" xml:space="preserve">
-    <value>File</value>
-  </data>
-  <data name="StatusLoadingText" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="StatusReadyText" xml:space="preserve">
-    <value>Ready</value>
-  </data>
-  <data name="TreeNodeImageKey" xml:space="preserve">
-    <value>folder</value>
-  </data>
 </root>

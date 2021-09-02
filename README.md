@@ -25,14 +25,44 @@ The tech demo can be downloaded from the [Mod DB](https://www.moddb.com/) site [
 
 * View contents of .GRP files from the Van Buren tech demo
 * Export (most) file formats (see below for the current list of supported ones)
+* Full original entity names for viewing and exporting
 
 ## File Formats
 
-This is a list of the file formats Van Buren Explorer supports for exporting and viewing
+This is a list of the file formats Van Buren Explorer supports for exporting and viewing:
 
+* TXT
+* INI
+* WAV
 * TGA (24/32 bit, compressed and uncompressed)
 * BMP
-* INI (text)
+
+The following formats are unknown and/or currently unsupported (but can still be viewed in hex mode):
+
+* G3D
+* SMA
+* TRE
+* SKEL
+* ANIM
+* SCR
+* MAP
+* CRITTER
+* VFX
+* GUI
+* COL
+* ITEM
+* WEAPON
+* ARMOR
+* DOOR
+* USE
+* AMMO
+* CON
+
+(note as viewers are built for these formats they will be moved into the supported section above)
+
+## Requirements
+
+* Visual Studio 2019
 
 ## Installation
 
@@ -41,13 +71,22 @@ This is a list of the file formats Van Buren Explorer supports for exporting and
 ## Usage
 
 1. Launch the applicaton from wherever you have downloaded or built it
-2. Click on the "..." icon in the toolbar to launch the folder browser
-3. Locate the folder where you have your copy of Van Buren installed to
-4. Enjoy!
+2. When the application launches, locate the folder where you have your copy of Van Buren installed to
+3. Enjoy!
+
+NOTE: If you want to change folders just click on the "..." button on the toolbar to switch to a different directory
 
 ## Repository
 
 This repository uses the Gitflow workflow model. All production releases are done on the master branch. The develop branch is the latest and greatest version. New PRs must be done in new branches against the develop branch.
+
+## NuGet packages
+
+This projects uses the following NuGet packages
+
+* [Be.Windows.Form.HexBox](https://www.nuget.org/packages/Be.Windows.Forms.HexBox/) - Viewing uknown formats
+* [NAudio](https://www.nuget.org/packages/NAudio/) - WAV player
+* [Pfim](https://www.nuget.org/packages/Pfim/) - TGA viewer
 
 ## How to Contribute
 
@@ -58,6 +97,15 @@ This repository uses the Gitflow workflow model. All production releases are don
 ## Support
 
 * Twitter at [@bsimser](https://twitter.com/bsimser)
+
+## Thanks
+
+Many thanks to a lot of great people far smarter than me. I just compiled a lot of their hard work together into this package and extended on it. Without their great tools this one would not exist.
+
+* RedneckHax0r for his awesome tool dump of Van Buren tools that pointed me to a lot of file info
+* Emersont1 for his vb_unpacker that pointed me to some file format info
+
+If you do spot anything that is wrong or you think I should include your name here please let me know!
 
 ## License
 

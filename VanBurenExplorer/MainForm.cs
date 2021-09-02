@@ -1,100 +1,169 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
+using VanBurenExplorer.Properties;
+using VanBurenExplorerLib;
+using VanBurenExplorerLib.Helpers;
+using VanBurenExplorerLib.Views;
 
 namespace VanBurenExplorer
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IMainView
     {
-        private string _rootPath;
+        private readonly MainViewPresenter _presenter;
 
         public MainForm()
         {
             InitializeComponent();
+            _presenter = new MainViewPresenter(this);
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Exit_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void aboutVanBurenExplorerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void About_Click(object sender, EventArgs e)
         {
             var aboutBox = new AboutBox();
             aboutBox.ShowDialog();
         }
 
-        private void directoryClick(object sender, EventArgs e)
+        private void Directory_Click(object sender, EventArgs e)
         {
             var result = folderBrowserDialog1.ShowDialog();
-            if (result.Equals(DialogResult.OK))
-            {
-                _rootPath = folderBrowserDialog1.SelectedPath;
-                InitTreeview(_rootPath);
-            }
+            if (!result.Equals(DialogResult.OK)) return;
+            ClearControls();
+            ChangeDirectory(folderBrowserDialog1.SelectedPath);
         }
 
-        private void InitTreeview(string path)
+        private void GetDirectories(DirectoryInfo[] subDirs, TreeNode nodeToAddTo)
         {
-            if (!path.EndsWith(@"\")) path += @"\";
-            directoryTextBox.Text = path.ToUpper();
-            var root = new TreeNode(path) { Tag = path };
-            root.Nodes.Add(new TreeNode());
-            treeView.Nodes.Clear();
-            treeView.Nodes.Add(root);
-            root.Expand();
-            treeView.SelectedNode = root;
-        }
-
-        /// <summary>
-        /// Before expanding a folder populate the subdirectories
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void treeView_BeforeExpand(object sender, TreeViewCancelEventArgs e)
-        {
-            if (e.Node.Tag != null)
+            foreach (var subDir in subDirs)
             {
-                LoadDirectory(e.Node, _rootPath);
-            }
-        }
-
-        private void LoadDirectory(TreeNode node, string path)
-        {
-            node.Nodes.Clear();
-            var dir = new DirectoryInfo(path);
-            var folders = dir.GetDirectories();
-            foreach (var treeNode in folders.Select(subdir => new TreeNode(subdir.Name) { Tag = subdir}))
-            {
-                treeNode.Nodes.Add(new TreeNode());
-                node.Nodes.Add(treeNode);
-            }
-        }
-
-        private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            using (new WaitCursor())
-            {
-                if (e.Node.IsSelected)
+                try
                 {
-                    // TODO load file directory
+                    var aNode = new TreeNode(subDir.Name, 0, 0) { Tag = subDir, ImageKey = Resources.TreeNodeImageKey };
+                    var subSubDirs = subDir.GetDirectories();
+                    if (subSubDirs.Length != 0)
+                    {
+                        GetDirectories(subSubDirs, aNode);
+                    }
+                    nodeToAddTo.Nodes.Add(aNode);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    // ok, so we are not allowed to dig into that directory. Move on...
                 }
             }
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             using (new WaitCursor())
             {
-                // TODO get currently selected file
-                // TODO process it and assign it to the plugin for viewing
+                if (!e.Node.IsSelected) return;
+                var newSelected = e.Node;
+                listView.Items.Clear();
+                var nodeDirInfo = (DirectoryInfo) newSelected.Tag;
+                ListViewItem.ListViewSubItem[] subItems;
+                foreach (var dir in nodeDirInfo.GetDirectories())
+                {
+                    var item = new ListViewItem(dir.Name, 0);
+                    subItems = new[] {
+                        new ListViewItem.ListViewSubItem(item, dir.LastAccessTime.ToString("g")),
+                        new ListViewItem.ListViewSubItem(item, Resources.DirectoryListViewType)
+                    };
+                    item.SubItems.AddRange(subItems);
+                    listView.Items.Add(item);
+                }
+                foreach (var file in nodeDirInfo.GetFiles())
+                {
+                    var item = new ListViewItem(file.Name, 1) {Tag = file};
+                    subItems = new[] { 
+                        new ListViewItem.ListViewSubItem(item, file.LastAccessTime.ToString("g")),
+                        new ListViewItem.ListViewSubItem(item, FileHelper.GetFileTypeDescription(file.Name)),
+                        new ListViewItem.ListViewSubItem(item, FileHelper.GetFormattedSize(file.Length))
+                    };
+                    item.SubItems.AddRange(subItems);
+                    listView.Items.Add(item);
+                }
+
+                directoryTextBox.Text = nodeDirInfo.FullName;
+                listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            }
+        }
+
+        private void ListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                // get currently selected file
+                var item = listView.FocusedItem;
+                // check if we have the full details for the file (folders won't have this)
+                var file = (FileInfo) item?.Tag;
+                // if this a folder just return
+                if (file == null) return;
+                // process it for viewing
+                _presenter.LoadFile(file);
             }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            using (new WaitCursor())
+            {
+                _presenter.Init();
+            }
+        }
 
+        /// <summary>
+        /// The tree view load is done here after the form is displayed so the user
+        /// is at least looking at something in case we have a big folder to process
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            // let the user know we're about to do this
+            toolStripStatusLabel1.Text = Resources.StatusLoadingText;
+            // start the program off by asking where to start looking for files
+            Directory_Click(this, e);
+            // once we're ready let the user know
+            toolStripStatusLabel1.Text = Resources.StatusReadyText;
+        }
+
+        public void SetControl(Control control)
+        {
+            splitContainer1.Panel1.Controls.Clear();
+            splitContainer1.Panel1.Controls.Add(control);
+        }
+
+        public void SetStatusText(string text)
+        {
+            toolStripStatusLabel1.Text = text;
+        }
+
+        public void ChangeDirectory(string path)
+        {
+            using (new WaitCursor())
+            {
+                var info = new DirectoryInfo(path);
+                if (!info.Exists) return;
+                var rootNode = new TreeNode(info.Name) { Tag = info };
+                GetDirectories(info.GetDirectories(), rootNode);
+                treeView.Nodes.Add(rootNode);
+                rootNode.Expand();
+                treeView.SelectedNode = rootNode;
+                _presenter.LoadCatalog(path);
+            }
+        }
+
+        private void ClearControls()
+        {
+            treeView.Nodes.Clear();
+            listView.Items.Clear();
+            splitContainer1.Panel1.Controls.Clear();
         }
     }
 }
