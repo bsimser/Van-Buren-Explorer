@@ -240,7 +240,7 @@
             this.MainMenuStrip = this.mainMenu;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Van Buren Explorer";
+            this.Text = "Van Buren Explorer 1.0.1";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.mainMenu.ResumeLayout(false);
